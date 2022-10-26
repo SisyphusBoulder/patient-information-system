@@ -34,31 +34,31 @@ import com.qa.patientsystem.service.PatientServiceImplementation;
 
 @ExtendWith(MockitoExtension.class)
 public class PatientControllerTest {
-	
+
 	@Mock
 	PatientServiceImplementation patientService;
-	
+
 	@Autowired
 	@InjectMocks
 	PatientController patientController;
-	
+
 	@Autowired
 	private MockMvc mockMvc;
-	
+
 	Patient patient1;
 	Patient patient2;
 	Patient patient3;
 	Patient patient4;
-	
+
 	List<Patient> patientList;
-	
+
 	Treatment treatment1;
 	Treatment treatment2;
 	Treatment treatment3;
 	Treatment treatment4;
-	
+
 	List<Treatment> treatmentList;
-	
+
 	@BeforeEach
 	public void setUp() {
 		treatment1 = new Treatment(111, "treatment1", 9.99f, true);
@@ -69,13 +69,13 @@ public class PatientControllerTest {
 		patient3 = new Patient(3, "patient3", (byte)19, 'F', "patient3@gmail.com", "Manchester", "Hernia", false, treatment3);
 		treatment4 = new Treatment(444, "treatment4", 5.95f, true);
 		patient4 = new Patient(4, "patient4", (byte)62, 'F', "patient4@gmail.com", "London", "Common cold", true, treatment4);
-		
+
 		patientList = Arrays.asList(patient1, patient2, patient3, patient4);
 		treatmentList = Arrays.asList(treatment1, treatment2, treatment3, treatment4);
-		
+
 		mockMvc = MockMvcBuilders.standaloneSetup(patientController).build();
 	}
-	
+
 	@AfterEach
 	public void tearDown() {
 		patient1 = patient2 = patient3 = patient4 = null;
@@ -83,26 +83,86 @@ public class PatientControllerTest {
 		patientList = null;
 		treatmentList = null;
 	}
-	
+
 	@Test
 	@DisplayName("get-treatments-test")
 	public void given_getAllTreatments_ShouldReturnList() throws Exception{
 		when(patientService.getAllTreatments()).thenReturn(treatmentList);
 		mockMvc.perform(get("/api/v1/treatments")
-									.accept(MediaType.APPLICATION_JSON))
+				.accept(MediaType.APPLICATION_JSON))
 		.andDo(MockMvcResultHandlers.print())
 		.andExpect(status().isOk())
 		.andExpect(jsonPath("$[1].name").value("treatment2"));
 	}
-	
+
 	@Test
 	@DisplayName("get-patients-test")
 	public void given_getAllPatients_ShouldReturnList() throws Exception{
 		when(patientService.getAllPatients()).thenReturn(patientList);
 		mockMvc.perform(get("/api/v1/patients")
-									.accept(MediaType.APPLICATION_JSON))
+				.accept(MediaType.APPLICATION_JSON))
 		.andDo(MockMvcResultHandlers.print())
 		.andExpect(status().isOk())
 		.andExpect(jsonPath("$[2].name").value("patient3"));
+	}
+
+	@Test
+	@DisplayName("get-patients-by-location-test")
+	public void given_locationPassedToFindByPatientLocation_ShouldReturnList() throws Exception{
+		List<Patient> modPatientList = Arrays.asList(patient1, patient4); 
+		when(patientService.findByPatientLocation("London")).thenReturn(modPatientList);
+		mockMvc.perform(get("/api/v1/patients/location/London")
+				.accept(MediaType.APPLICATION_JSON))
+		.andDo(MockMvcResultHandlers.print())
+		.andExpect(status().isOk())
+		.andExpect(jsonPath("$[1].name").value("patient4"));
+	}
+	
+	@Test
+	@DisplayName("get-patients-by-age-test")
+	public void given_agePassedToFindByPatientAge_ShouldReturnList() throws Exception{
+		List<Patient> modPatientList = Arrays.asList(patient1); 
+		when(patientService.findByPatientAge((byte)27)).thenReturn(modPatientList);
+		mockMvc.perform(get("/api/v1/patients/age/27")
+				.accept(MediaType.APPLICATION_JSON))
+		.andDo(MockMvcResultHandlers.print())
+		.andExpect(status().isOk())
+		.andExpect(jsonPath("$[0].name").value("patient1"));
+	}
+	
+	@Test
+	@DisplayName("get-patients-by-condition-test")
+	public void given_conditionPassedToFindByPatientCondtion_ShouldReturnList() throws Exception{
+		List<Patient> modPatientList = Arrays.asList(patient2); 
+		when(patientService.findByPatientCondition("Influenza")).thenReturn(modPatientList);
+		mockMvc.perform(get("/api/v1/patients/condition/Influenza")
+				.accept(MediaType.APPLICATION_JSON))
+		.andDo(MockMvcResultHandlers.print())
+		.andExpect(status().isOk())
+		.andExpect(jsonPath("$[0].name").value("patient2"));
+	}
+	
+	@Test
+	@DisplayName("get-patients-by-insurance-test")
+	public void given_insurancePassedToFindByPatientInsurance_ShouldReturnList() throws Exception{
+		List<Patient> modPatientList = Arrays.asList(patient2, patient3); 
+		when(patientService.findByPatientInsurance(false)).thenReturn(modPatientList);
+		mockMvc.perform(get("/api/v1/patients/insurance/false")
+				.accept(MediaType.APPLICATION_JSON))
+		.andDo(MockMvcResultHandlers.print())
+		.andExpect(status().isOk())
+		.andExpect(jsonPath("$[1].name").value("patient3"));
+	}
+	
+	@Test
+	@DisplayName("get-patients-by-sex-test")
+	public void given_sexPassedToFindByPatientSex_ShouldReturnList() throws Exception{
+		List<Patient> modPatientList = Arrays.asList(patient1, patient2); 
+		when(patientService.findByPatientSex('M')).thenReturn(modPatientList);
+		mockMvc.perform(get("/api/v1/patients/sex/M")
+				.accept(MediaType.APPLICATION_JSON))
+		.andDo(MockMvcResultHandlers.print())
+		.andExpect(status().isOk())
+		.andExpect(jsonPath("$[1].name").value("patient2"));
 	}
 }

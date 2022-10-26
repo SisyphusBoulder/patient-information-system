@@ -28,4 +28,30 @@ public class PatientServiceImplementation implements IPatientService {
 	public List<Treatment> getAllTreatments() {
 		return this.treatmentRepository.findAll();
 	}
+
+	@Override
+	public List<Patient> findByPatientLocation(String location) {
+		
+		return this.patientRepository.findByPatientLocation(location);
+	}
+
+	@Override
+	public List<Patient> findByPatientCondition(String condition) {
+		return this.patientRepository.findByPatientCondition(condition);
+	}
+
+	@Override
+	public List<Patient> findByPatientAge(byte age) {
+		return this.patientRepository.findByPatientAge(age);
+	}
+
+	@Override
+	public List<Patient> findByPatientInsurance(boolean isInsured) {
+		return this.patientRepository.findByPatientInsurance(isInsured);
+	}
+
+	@Override
+	public List<Patient> findByPatientSex(char sex) {
+		return this.patientRepository.findByPatientSex(sex);
+	}
 }
