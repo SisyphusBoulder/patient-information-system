@@ -5,8 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Max;
+//import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -25,8 +24,8 @@ import lombok.ToString;
 @Builder
 @ToString
 @Entity
-@Table(name = "patient_details")
-public class Patient {
+@Table(name = "treatment")
+public class Treatment {
 	
 	@Id
 	@GeneratedValue
@@ -41,35 +40,11 @@ public class Patient {
 	
 	@NotNull
 	@Min(0)
-	@Max(105)
-	@Column(name = "age")
-	private byte age;
-	
-	@NotBlank
-	@Pattern(regexp = "[FM]", message = "sex must be assigned as either F or M!")
-	private char sex;
-	
-	@NotBlank
-	@Email(message = "Email must follow regular format!")
-	private String email;
-	
-	@NotBlank
-	@Size(min=2, max=30, message = "location must be between 2 and 30 characters!")
-	@Pattern(regexp = "^[A-Za-z]*", message = "invalid name, must only contain alphabet characters!")
-	@Column(name = "location")
-	private String location;
-	
-	@NotBlank
-	@Column(name = "condition")
-	private String condition;
-	@NotNull
-	
-	@Column(name = "is_insured")
-	private boolean isInsured;
+	@Column(name = "price")
+	private float price;
 	
 	@NotNull
-	@Column(name = "treatment")
-	private Treatment treatment;
-	
+	@Column(name = "is_available")
+	private boolean isAvailable;
 
 }
