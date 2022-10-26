@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.qa.patientsystem.entity.Patient;
 import com.qa.patientsystem.entity.Treatment;
+import com.qa.patientsystem.exception.PatientNotFoundException;
 import com.qa.patientsystem.repository.PatientRepository;
 import com.qa.patientsystem.repository.TreatmentRepository;
 
@@ -16,7 +17,7 @@ public class PatientServiceImplementation implements IPatientService {
 
 	@Autowired
 	PatientRepository patientRepository;
-	
+
 	@Autowired
 	TreatmentRepository treatmentRepository;
 
@@ -32,7 +33,7 @@ public class PatientServiceImplementation implements IPatientService {
 
 	@Override
 	public List<Patient> findByPatientLocation(String location) {
-		
+
 		return this.patientRepository.findByPatientLocation(location);
 	}
 
@@ -57,12 +58,20 @@ public class PatientServiceImplementation implements IPatientService {
 	}
 
 	@Override
-	public Patient getPatientById(int id) {
-		return this.patientRepository.getPatientById(id);
+	public Patient getPatientById(int id) throws PatientNotFoundException{
+		Patient foundPatient = this.patientRepository.getPatientById(id);
+		if(foundPatient == null) {
+			throw new PatientNotFoundException("This patient does not exist!");
+		}
+		return foundPatient;
 	}
 
 	@Override
-	public Patient getPatientByName(String name) {
-		return this.patientRepository.getPatientByName(name);	
+	public Patient getPatientByName(String name) throws PatientNotFoundException {
+		Patient foundPatient = this.patientRepository.getPatientByName(name);
+		if(foundPatient == null) {
+			throw new PatientNotFoundException("This patient does not exits!");
 		}
+		return foundPatient;
+	}
 }

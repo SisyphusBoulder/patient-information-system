@@ -171,7 +171,7 @@ public class PatientControllerTest {
 	public void given_idPassedToGetByPatientId_ShouldReturnCorrectPatient() throws Exception{
 		Patient expectedPatient = patient1; 
 		when(patientService.getPatientById(1)).thenReturn(expectedPatient);
-		mockMvc.perform(get("/api/v1/patients/id/1")
+		mockMvc.perform(get("/api/v1/patients/id/5")
 				.accept(MediaType.APPLICATION_JSON))
 		.andDo(MockMvcResultHandlers.print())
 		.andExpect(status().isOk())

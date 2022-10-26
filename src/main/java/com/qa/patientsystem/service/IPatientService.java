@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.qa.patientsystem.entity.Patient;
 import com.qa.patientsystem.entity.Treatment;
+import com.qa.patientsystem.exception.PatientNotFoundException;
 
 public interface IPatientService {
 	
@@ -18,8 +19,8 @@ public interface IPatientService {
 	public List<Patient> findByPatientInsurance(boolean isInsured);
 	public List<Patient> findByPatientSex(char sex);
 	
-	public Patient getPatientById(int id);
-	public Patient getPatientByName(String name);
+	public Patient getPatientById(int id) throws PatientNotFoundException;
+	public Patient getPatientByName(String name) throws PatientNotFoundException;
 
 
 }
