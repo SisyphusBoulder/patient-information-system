@@ -62,14 +62,14 @@ public class Patient {
 	@NotBlank
 	@Column(name = "condition")
 	private String condition;
-	@NotNull
 	
+	@NotNull
 	@Column(name = "is_insured")
 	private boolean isInsured;
 	
-	@NotNull
+	/*@NotNull
 	@Column(name = "treatment")
-	private Treatment treatment;
+	private Treatment treatment;*/
 	
 
 }

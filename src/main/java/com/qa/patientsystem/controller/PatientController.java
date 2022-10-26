@@ -14,6 +14,8 @@ import com.qa.patientsystem.entity.Patient;
 import com.qa.patientsystem.entity.Treatment;
 import com.qa.patientsystem.service.PatientServiceImplementation;
 
+import net.bytebuddy.asm.MemberSubstitution.Substitution.Chain.Step.Resolution;
+
 
 
 @RestController
@@ -102,6 +104,30 @@ public class PatientController {
 		try {
 			List<Patient> patientList = this.patientService.findByPatientSex(sex);
 			responseEntity = new ResponseEntity<>(patientList, HttpStatus.OK);
+		} catch (Exception e) {
+			responseEntity = new ResponseEntity<>("Some internal server error occured!", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		return responseEntity;
+	}
+	
+	@GetMapping("/patients/id/{id}")
+	public ResponseEntity<?> getPatientById(@PathVariable("id") int id){
+		try {
+			Patient patient = this.patientService.getPatientById(id);
+			responseEntity = new ResponseEntity<>(patient, HttpStatus.OK);
+		} catch (Exception e) {
+			responseEntity = new ResponseEntity<>("Some internal server error occured!", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		return responseEntity;
+	}
+	
+	@GetMapping("/patients/name/{name}")
+	public ResponseEntity<?> getPatientByName(@PathVariable("name") String name){
+		try {
+			Patient patient = this.patientService.getPatientByName(name);
+			responseEntity = new ResponseEntity<>(patient, HttpStatus.OK);
 		} catch (Exception e) {
 			responseEntity = new ResponseEntity<>("Some internal server error occured!", HttpStatus.INTERNAL_SERVER_ERROR);
 		}

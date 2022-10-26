@@ -1,6 +1,7 @@
 package com.qa.patientsystem.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,4 +55,14 @@ public class PatientServiceImplementation implements IPatientService {
 	public List<Patient> findByPatientSex(char sex) {
 		return this.patientRepository.findByPatientSex(sex);
 	}
+
+	@Override
+	public Patient getPatientById(int id) {
+		return this.patientRepository.getPatientById(id);
+	}
+
+	@Override
+	public Patient getPatientByName(String name) {
+		return this.patientRepository.getPatientByName(name);	
+		}
 }

@@ -62,13 +62,13 @@ public class PatientControllerTest {
 	@BeforeEach
 	public void setUp() {
 		treatment1 = new Treatment(111, "treatment1", 9.99f, true);
-		patient1 = new Patient(1, "patient1", (byte)27, 'M', "patient1@gmail.com", "London", "Liver damage", true, treatment1);
+		patient1 = new Patient(1, "patient1", (byte)27, 'M', "patient1@gmail.com", "London", "Liver damage", true);//, treatment1);
 		treatment2 = new Treatment(222, "treatment2", 14.57f, true);
-		patient2 = new Patient(2, "patient2", (byte)53, 'M', "patient2@gmail.com", "Birmingham", "Influenza", false, treatment2);
+		patient2 = new Patient(2, "patient2", (byte)53, 'M', "patient2@gmail.com", "Birmingham", "Influenza", false);//, treatment2);
 		treatment3 = new Treatment(333, "treatment3", 52.36f, false);
-		patient3 = new Patient(3, "patient3", (byte)19, 'F', "patient3@gmail.com", "Manchester", "Hernia", false, treatment3);
+		patient3 = new Patient(3, "patient3", (byte)19, 'F', "patient3@gmail.com", "Manchester", "Hernia", false);//, treatment3);
 		treatment4 = new Treatment(444, "treatment4", 5.95f, true);
-		patient4 = new Patient(4, "patient4", (byte)62, 'F', "patient4@gmail.com", "London", "Common cold", true, treatment4);
+		patient4 = new Patient(4, "patient4", (byte)62, 'F', "patient4@gmail.com", "London", "Common cold", true);//, treatment4);
 
 		patientList = Arrays.asList(patient1, patient2, patient3, patient4);
 		treatmentList = Arrays.asList(treatment1, treatment2, treatment3, treatment4);
@@ -164,5 +164,29 @@ public class PatientControllerTest {
 		.andDo(MockMvcResultHandlers.print())
 		.andExpect(status().isOk())
 		.andExpect(jsonPath("$[1].name").value("patient2"));
+	}
+	
+	@Test
+	@DisplayName("get-patient-by-id")
+	public void given_idPassedToGetByPatientId_ShouldReturnCorrectPatient() throws Exception{
+		Patient expectedPatient = patient1; 
+		when(patientService.getPatientById(1)).thenReturn(expectedPatient);
+		mockMvc.perform(get("/api/v1/patients/id/1")
+				.accept(MediaType.APPLICATION_JSON))
+		.andDo(MockMvcResultHandlers.print())
+		.andExpect(status().isOk())
+		.andExpect(jsonPath("$.name").value("patient1"));
+	}
+	
+	@Test
+	@DisplayName("get-patient-by-name")
+	public void given_namePassedToGetPatientByName_ShouldReturnCorrectPatient() throws Exception{
+		Patient expectedPatient = patient2; 
+		when(patientService.getPatientByName("patient2")).thenReturn(expectedPatient);
+		mockMvc.perform(get("/api/v1/patients/name/patient2")
+				.accept(MediaType.APPLICATION_JSON))
+		.andDo(MockMvcResultHandlers.print())
+		.andExpect(status().isOk())
+		.andExpect(jsonPath("$.id").value("2"));
 	}
 }
