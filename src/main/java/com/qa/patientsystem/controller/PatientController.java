@@ -2,6 +2,8 @@ package com.qa.patientsystem.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +21,6 @@ import com.qa.patientsystem.entity.Treatment;
 import com.qa.patientsystem.exception.PatientAlreadyExistsException;
 import com.qa.patientsystem.exception.PatientNotFoundException;
 import com.qa.patientsystem.service.PatientServiceImplementation;
-
-import net.bytebuddy.asm.MemberSubstitution.Substitution.Chain.Step.Resolution;
-
 
 
 @RestController
@@ -58,7 +57,7 @@ public class PatientController {
 	}
 
 	@GetMapping("/patients/location/{location}")
-	public ResponseEntity<?> findByPatientLocation(@PathVariable("location") String location){
+	public ResponseEntity<?> findByPatientLocation(@Valid @PathVariable("location") String location){
 		try {
 			List<Patient> patientList = this.patientService.findByPatientLocation(location);
 			responseEntity = new ResponseEntity<>(patientList, HttpStatus.OK);
@@ -70,7 +69,7 @@ public class PatientController {
 	}
 	
 	@GetMapping("/patients/condition/{condition}")
-	public ResponseEntity<?> findByPatientCondition(@PathVariable("condition") String condition){
+	public ResponseEntity<?> findByPatientCondition(@Valid @PathVariable("condition") String condition){
 		try {
 			List<Patient> patientList = this.patientService.findByPatientCondition(condition);
 			responseEntity = new ResponseEntity<>(patientList, HttpStatus.OK);
@@ -82,7 +81,7 @@ public class PatientController {
 	}
 	
 	@GetMapping("/patients/age/{age}")
-	public ResponseEntity<?> findByPatientLocation(@PathVariable("age") byte age){
+	public ResponseEntity<?> findByPatientLocation(@Valid @PathVariable("age") byte age){
 		try {
 			List<Patient> patientList = this.patientService.findByPatientAge(age);
 			responseEntity = new ResponseEntity<>(patientList, HttpStatus.OK);
@@ -94,7 +93,7 @@ public class PatientController {
 	}
 	
 	@GetMapping("/patients/insurance/{isInsured}")
-	public ResponseEntity<?> findByPatientInsurance(@PathVariable("isInsured") boolean isInsured){
+	public ResponseEntity<?> findByPatientInsurance(@Valid @PathVariable("isInsured") boolean isInsured){
 		try {
 			List<Patient> patientList = this.patientService.findByPatientInsurance(isInsured);
 			responseEntity = new ResponseEntity<>(patientList, HttpStatus.OK);
@@ -106,7 +105,7 @@ public class PatientController {
 	}
 	
 	@GetMapping("/patients/sex/{sex}")
-	public ResponseEntity<?> findByPatientSex(@PathVariable("sex") char sex){
+	public ResponseEntity<?> findByPatientSex(@Valid @PathVariable("sex") char sex){
 		try {
 			List<Patient> patientList = this.patientService.findByPatientSex(sex);
 			responseEntity = new ResponseEntity<>(patientList, HttpStatus.OK);
@@ -118,7 +117,7 @@ public class PatientController {
 	}
 	
 	@GetMapping("/patients/id/{id}")
-	public ResponseEntity<?> getPatientById(@PathVariable("id") int id) throws PatientNotFoundException{
+	public ResponseEntity<?> getPatientById(@Valid @PathVariable("id") int id) throws PatientNotFoundException{
 		try {
 			Patient patient = this.patientService.getPatientById(id);
 			responseEntity = new ResponseEntity<>(patient, HttpStatus.OK);
@@ -132,7 +131,7 @@ public class PatientController {
 	}
 	
 	@GetMapping("/patients/name/{name}")
-	public ResponseEntity<?> getPatientByName(@PathVariable("name") String name) throws PatientNotFoundException{
+	public ResponseEntity<?> getPatientByName(@Valid @PathVariable("name") String name) throws PatientNotFoundException{
 		try {
 			Patient patient = this.patientService.getPatientByName(name);
 			responseEntity = new ResponseEntity<>(patient, HttpStatus.OK);
@@ -192,7 +191,7 @@ public class PatientController {
 	}
 
 	@DeleteMapping("/patients/{id}")
-	public ResponseEntity<?> deletePatient(@PathVariable("id") int id) throws PatientNotFoundException{
+	public ResponseEntity<?> deletePatient(@Valid @PathVariable("id") int id) throws PatientNotFoundException{
 		try {
 			boolean status = this.patientService.deletePatient(id);
 			if(status) {

@@ -16,12 +16,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.qa.patientsystem.entity.Patient;
 
 @ExtendWith(SpringExtension.class)
-@DataJpaTest
+@SpringBootTest
 @AutoConfigureTestDatabase(replace=Replace.NONE)
 public class PatientRepositoryTest {
 	
@@ -75,7 +76,6 @@ public class PatientRepositoryTest {
 	
 	@Test
 	@DisplayName("get-patient-non-existing-id-test")
-	//@Disabled
 	public void given_Non_Existing_Id_Should_Return_Optional_Empty() {
 		patientRepository.save(patient1);
 		assertThat(patientRepository.findById(2)).isEmpty();

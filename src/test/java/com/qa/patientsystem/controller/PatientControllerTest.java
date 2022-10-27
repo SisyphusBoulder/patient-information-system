@@ -84,6 +84,18 @@ public class PatientControllerTest {
 		patientList = null;
 		treatmentList = null;
 	}
+	
+	public static String asJsonString(Object obj) {
+		ObjectMapper Obj = new ObjectMapper();
+		String jsonStr = null;
+		try {
+            jsonStr = Obj.writeValueAsString(obj);
+            System.out.println(jsonStr);
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+        return jsonStr;
+	}
 
 	@Test
 	@DisplayName("get-treatments-test")
@@ -172,7 +184,7 @@ public class PatientControllerTest {
 	public void given_idPassedToGetByPatientId_ShouldReturnCorrectPatient() throws Exception{
 		Patient expectedPatient = patient1; 
 		when(patientService.getPatientById(1)).thenReturn(expectedPatient);
-		mockMvc.perform(get("/api/v1/patients/id/5")
+		mockMvc.perform(get("/api/v1/patients/id/1")
 				.accept(MediaType.APPLICATION_JSON))
 		.andDo(MockMvcResultHandlers.print())
 		.andExpect(status().isOk())
@@ -190,4 +202,16 @@ public class PatientControllerTest {
 		.andExpect(status().isOk())
 		.andExpect(jsonPath("$.id").value("2"));
 	}
+	
+	@Test
+	@DisplayName("save-patient-test")
+	public void given_Patient_To_Save_Patient_Should_Return_Patient_As_JSON_With_Status_Created() throws Exception {
+		when(patientService.addPatient(any())).thenReturn(patient1);
+		mockMvc.perform(post("/api/v1/patients/signup")
+				        .contentType(MediaType.APPLICATION_JSON)
+				        .content(asJsonString(patient1)))
+		        .andExpect(status().isCreated())
+		        .andExpect(jsonPath("$.name").value("patient1"));
+	}
+	
 }

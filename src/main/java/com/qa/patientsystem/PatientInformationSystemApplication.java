@@ -1,5 +1,6 @@
 package com.qa.patientsystem;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -18,7 +19,12 @@ public class PatientInformationSystemApplication {
 	public Docket api() {
 		return new Docket(DocumentationType.SWAGGER_2).select().apis(RequestHandlerSelectors.basePackage("com.qa.patientsystem.controller")).paths(PathSelectors.any()).build();
 	}
-
+	
+	@Bean
+	public ModelMapper modelMapper() {
+	    return new ModelMapper();
+	}
+	
 	public static void main(String[] args) {
 		SpringApplication.run(PatientInformationSystemApplication.class, args);
 	}

@@ -28,21 +28,21 @@ import com.qa.patientsystem.repository.PatientRepository;
 
 @ExtendWith(MockitoExtension.class)
 public class PatientServiceTest {
-	
+
 	@Mock
 	private PatientRepository patientRepository;
-	
+
 	@Autowired
 	@InjectMocks
 	private PatientServiceImplementation patientService;
-	
+
 	Patient patient1;
 	Patient patient2;
 	Patient patient3;
 	Patient patient4;
-	
+
 	List<Patient> patientList;
-	
+
 	@BeforeEach
 	public void setUp() {
 		patient1 = new Patient(1, "patient1", (byte)27, 'M', "patient1@gmail.com", "London", "Liver damage", true, "password1");
@@ -51,33 +51,32 @@ public class PatientServiceTest {
 		patient4 = new Patient(4, "patient4", (byte)62, 'F', "patient4@gmail.com", "London", "Common cold", true, "password4");
 		patientList = Arrays.asList(patient1, patient2, patient3, patient4);
 	}
-	
+
 	@AfterEach
 	public void tearDown() {
 		patient1 = patient2 = patient3 = patient4 = null;
 		patientList = null;
 		patientRepository.deleteAll();
 	}
-	
+
 	@Test
 	@DisplayName("save-patient-test")
-	
 	public void given_Patient_To_Save_Should_Return_The_Saved_Patient() throws PatientAlreadyExistsException, PatientNotFoundException {
-		when(patientRepository.findByName(any())).thenReturn(null);
+		when(patientRepository.getPatientById(any())).thenReturn(patient1);
 		when(patientRepository.save(any())).thenReturn(patient1);
 		Patient savedPatient = patientService.addPatient(patient1);
+		System.out.println(savedPatient);
 		assertNotNull(savedPatient);
 		assertEquals(1,savedPatient.getId());
-		verify(patientRepository,times(1)).findByName(any());
+		verify(patientRepository,times(1)).getPatientById(any());
 		verify(patientRepository,times(1)).save(any());
 	}
-	
+
 	@Test
 	@DisplayName("save-patient-throws-exception-test")
-	
 	public void given_Existing_Patient_To_Save_Method_Should_Throw_Exception() throws PatientAlreadyExistsException {
-		when(patientRepository.findByName(any())).thenReturn(patient1);
-		
+		when(patientRepository.getPatientById(any())).thenReturn(patient1);
+
 		//patientService.addPatient(patient1);
 		assertThrows(PatientAlreadyExistsException.class,()-> patientService.addPatient(patient1));
 	}

@@ -3,6 +3,7 @@ package com.qa.patientsystem.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
@@ -18,6 +19,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import net.bytebuddy.dynamic.loading.ClassReloadingStrategy.Strategy;
 
 @Data
 @NoArgsConstructor
@@ -29,13 +31,13 @@ import lombok.ToString;
 public class Patient {
 	
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private int id;
 	
 	@NotBlank
 	@Size(min=2, max=20, message = "name must be between 2 and 20 characters!")
-	@Pattern(regexp = "^[A-Za-z]*", message = "invalid name, must only contain alphabet characters!")
+	@Pattern(regexp = "^[A-Za-z0-9 ]*", message = "invalid name, must only contain alphabet characters!")
 	@Column(name = "name")
 	private String name;
 	
@@ -45,8 +47,8 @@ public class Patient {
 	@Column(name = "age")
 	private byte age;
 	
-	@NotBlank
-	@Pattern(regexp = "[FM]", message = "sex must be assigned as either F or M!")
+	//@NotBlank
+	//@Pattern(regexp = "[FM]", message = "sex must be assigned as either F or M!")
 	private char sex;
 	
 	@NotBlank
@@ -55,7 +57,7 @@ public class Patient {
 	
 	@NotBlank
 	@Size(min=2, max=30, message = "location must be between 2 and 30 characters!")
-	@Pattern(regexp = "^[A-Za-z]*", message = "invalid name, must only contain alphabet characters!")
+	@Pattern(regexp = "^[A-Za-z0-9 ]*", message = "invalid name, must only contain alphabet characters!")
 	@Column(name = "location")
 	private String location;
 	
