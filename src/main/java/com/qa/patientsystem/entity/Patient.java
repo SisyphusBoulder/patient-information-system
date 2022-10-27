@@ -67,6 +67,11 @@ public class Patient {
 	@Column(name = "is_insured")
 	private boolean isInsured;
 	
+	@NotNull
+	@Size(min=5, max=20, message = "Password must be between 5 and 20 characters!")
+	@Column(name = "password")
+	private String password;
+	
 	/*@NotNull
 	@Column(name = "treatment")
 	private Treatment treatment;*/

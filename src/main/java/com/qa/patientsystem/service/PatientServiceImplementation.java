@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.qa.patientsystem.entity.Patient;
 import com.qa.patientsystem.entity.Treatment;
+import com.qa.patientsystem.exception.InvalidLoginDataException;
 import com.qa.patientsystem.exception.PatientAlreadyExistsException;
 import com.qa.patientsystem.exception.PatientNotFoundException;
 import com.qa.patientsystem.repository.PatientRepository;
@@ -117,6 +118,23 @@ public class PatientServiceImplementation implements IPatientService {
 		status = true;
 		
 		return status;
+	}
+	
+	@Override
+	public Patient login(int id, String email, String password) throws PatientNotFoundException, InvalidLoginDataException{
+		Patient selectedPatient = null;
+		Optional<Patient> findPatientById = this.patientRepository.findById(id);
+		System.out.println(findPatientById);
+		if(!findPatientById.isPresent()) {
+			throw new PatientNotFoundException("Patient does not exist!");
+		}
+		if(!(findPatientById.get().getEmail().equals(email)) || !(findPatientById.get().getPassword().equals(password))) {
+			throw new InvalidLoginDataException("Email or password is incorrect!");
+		}
+		else {
+			selectedPatient = this.patientRepository.findById(id).get();
+		}
+		return selectedPatient;
 	}
 
 	@Override

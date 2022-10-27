@@ -62,13 +62,13 @@ public class PatientControllerTest {
 	@BeforeEach
 	public void setUp() {
 		treatment1 = new Treatment(111, "treatment1", 9.99f, true);
-		patient1 = new Patient(1, "patient1", (byte)27, 'M', "patient1@gmail.com", "London", "Liver damage", true);//, treatment1);
+		patient1 = new Patient(1, "patient1", (byte)27, 'M', "patient1@gmail.com", "London", "Liver damage", true, "password1");
 		treatment2 = new Treatment(222, "treatment2", 14.57f, true);
-		patient2 = new Patient(2, "patient2", (byte)53, 'M', "patient2@gmail.com", "Birmingham", "Influenza", false);//, treatment2);
+		patient2 = new Patient(2, "patient2", (byte)53, 'M', "patient2@gmail.com", "Birmingham", "Influenza", false, "password2");
 		treatment3 = new Treatment(333, "treatment3", 52.36f, false);
-		patient3 = new Patient(3, "patient3", (byte)19, 'F', "patient3@gmail.com", "Manchester", "Hernia", false);//, treatment3);
+		patient3 = new Patient(3, "patient3", (byte)19, 'F', "patient3@gmail.com", "Manchester", "Hernia", false, "password3");
 		treatment4 = new Treatment(444, "treatment4", 5.95f, true);
-		patient4 = new Patient(4, "patient4", (byte)62, 'F', "patient4@gmail.com", "London", "Common cold", true);//, treatment4);
+		patient4 = new Patient(4, "patient4", (byte)62, 'F', "patient4@gmail.com", "London", "Common cold", true, "password4");
 
 		patientList = Arrays.asList(patient1, patient2, patient3, patient4);
 		treatmentList = Arrays.asList(treatment1, treatment2, treatment3, treatment4);

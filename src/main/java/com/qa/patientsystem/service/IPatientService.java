@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.qa.patientsystem.entity.Patient;
 import com.qa.patientsystem.entity.Treatment;
+import com.qa.patientsystem.exception.InvalidLoginDataException;
 import com.qa.patientsystem.exception.PatientAlreadyExistsException;
 import com.qa.patientsystem.exception.PatientNotFoundException;
 
@@ -30,4 +31,6 @@ public interface IPatientService {
 	Patient updatePatient(Patient patient) throws PatientNotFoundException;
 
 	boolean deletePatient(int id) throws PatientNotFoundException;
+
+	Patient login(int id, String email, String password) throws PatientNotFoundException, InvalidLoginDataException;
 }

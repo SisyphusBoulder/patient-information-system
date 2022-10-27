@@ -160,6 +160,20 @@ public class PatientController {
 
 		return responseEntity;
 	}
+	
+	@GetMapping("/patients/login")
+	public ResponseEntity<?> patientLogin(@RequestBody Patient patient) throws PatientNotFoundException{
+		try {
+			Patient selectedPatient = this.patientService.login(patient.getId(), patient.getEmail(), patient.getPassword());
+			responseEntity = new ResponseEntity<>(selectedPatient, HttpStatus.OK);
+		}catch(PatientNotFoundException e) {
+			throw e;
+		}catch (Exception e) {
+			responseEntity = new ResponseEntity<>("Some internal server error occured!", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		return responseEntity;
+	}
 
 	@PutMapping("/patients")
 	public ResponseEntity<?> updatePatient(@RequestBody Patient patient) throws PatientNotFoundException{
