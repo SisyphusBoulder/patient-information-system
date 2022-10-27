@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.qa.patientsystem.entity.Patient;
 import com.qa.patientsystem.entity.Treatment;
+import com.qa.patientsystem.exception.PatientAlreadyExistsException;
 import com.qa.patientsystem.exception.PatientNotFoundException;
 
 public interface IPatientService {
@@ -22,5 +23,11 @@ public interface IPatientService {
 	public Patient getPatientById(int id) throws PatientNotFoundException;
 	public Patient getPatientByName(String name) throws PatientNotFoundException;
 
+	Patient updatePatientDetails(int id, String location, boolean isInsured) throws PatientNotFoundException;
 
+	Patient addPatient(Patient patient) throws PatientAlreadyExistsException, PatientNotFoundException;
+
+	Patient updatePatient(Patient patient) throws PatientNotFoundException;
+
+	boolean deletePatient(int id) throws PatientNotFoundException;
 }
