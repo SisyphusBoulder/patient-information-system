@@ -38,4 +38,5 @@ public interface PatientRepository extends JpaRepository<Patient, Integer> {
 	
 	@Query("update Patient p set p.location = :location, p.isInsured = :isInsured where p.id = :id")
 	int updatePatientDetails(int id, String location, boolean isInsured);
+	
 }
