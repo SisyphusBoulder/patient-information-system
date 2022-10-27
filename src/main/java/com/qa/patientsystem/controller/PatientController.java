@@ -5,13 +5,18 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.qa.patientsystem.entity.Patient;
 import com.qa.patientsystem.entity.Treatment;
+import com.qa.patientsystem.exception.PatientAlreadyExistsException;
 import com.qa.patientsystem.exception.PatientNotFoundException;
 import com.qa.patientsystem.service.PatientServiceImplementation;
 
@@ -135,6 +140,69 @@ public class PatientController {
 			throw e;
 		}catch (Exception e) {
 			responseEntity = new ResponseEntity<>("Some internal server error occured!", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		return responseEntity;
+	}
+	
+	@PostMapping("/patients/signup")
+	public ResponseEntity<?> addPatient(@RequestBody Patient patient) throws PatientAlreadyExistsException{
+		try {
+			Patient addedPatient = this.patientService.addPatient(patient);
+			System.out.println("Added patient successfully!" + addedPatient);
+			responseEntity = new ResponseEntity<>(patient, HttpStatus.CREATED);
+		} catch (PatientAlreadyExistsException e) {
+			throw e;
+		}catch (Exception e) {
+			e.printStackTrace();
+			responseEntity = new ResponseEntity<>("Some internal error occured...", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		return responseEntity;
+	}
+
+	@PutMapping("/patients")
+	public ResponseEntity<?> updatePatient(@RequestBody Patient patient) throws PatientNotFoundException{
+		try {
+			Patient updatedPatient = this.patientService.updatePatient(patient);
+			System.out.println("Updated patient successfully!" + updatedPatient);
+			responseEntity = new ResponseEntity<>(patient, HttpStatus.OK);
+		} catch (PatientNotFoundException e) {
+			throw e;
+		}catch (Exception e) {
+			e.printStackTrace();
+			responseEntity = new ResponseEntity<>("Some internal error occured...", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		return responseEntity;
+	}
+
+	@DeleteMapping("/patients/{id}")
+	public ResponseEntity<?> deletePatient(@PathVariable("id") int id) throws PatientNotFoundException{
+		try {
+			boolean status = this.patientService.deletePatient(id);
+			if(status) {
+				responseEntity = new ResponseEntity<>("Deleted patient successfully!", HttpStatus.OK);
+			}
+		} catch (PatientNotFoundException e) {
+			throw e;
+		}catch (Exception e) {
+			e.printStackTrace();
+			responseEntity = new ResponseEntity<>("Some internal error occured...", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		return responseEntity;
+	}
+	
+	@PutMapping("/patients/update_details")
+	public ResponseEntity<?> updatePatientDetails(@RequestBody Patient patient) throws PatientNotFoundException{
+		try {
+			Patient updatedPatient = this.patientService.updatePatientDetails(patient.getId(), patient.getLocation(), patient.isInsured());
+			responseEntity = new ResponseEntity<>(updatedPatient, HttpStatus.OK);
+		} catch (PatientNotFoundException e) {
+			throw e;
+		} catch (Exception e) {
+			responseEntity = new ResponseEntity<>("Some internal error occurred!", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
 		return responseEntity;

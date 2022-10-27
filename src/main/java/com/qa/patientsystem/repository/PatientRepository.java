@@ -36,5 +36,6 @@ public interface PatientRepository extends JpaRepository<Patient, Integer> {
 	@Query("select p from Patient p where p.isInsured = :isInsured")
 	List<Patient> findByPatientInsurance(Boolean isInsured);
 	
-	
+	@Query("update Patient p set p.location = :location, p.isInsured = :isInsured where p.id = :id")
+	int updatePatientDetails(int id, String location, boolean isInsured);
 }

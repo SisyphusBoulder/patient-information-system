@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.qa.patientsystem.entity.Patient;
 import com.qa.patientsystem.entity.Treatment;
+import com.qa.patientsystem.exception.PatientAlreadyExistsException;
 import com.qa.patientsystem.exception.PatientNotFoundException;
 import com.qa.patientsystem.repository.PatientRepository;
 import com.qa.patientsystem.repository.TreatmentRepository;
@@ -20,7 +21,8 @@ public class PatientServiceImplementation implements IPatientService {
 
 	@Autowired
 	TreatmentRepository treatmentRepository;
-
+	
+	
 	@Override
 	public List<Patient> getAllPatients() {
 		return this.patientRepository.findAll();
@@ -70,8 +72,66 @@ public class PatientServiceImplementation implements IPatientService {
 	public Patient getPatientByName(String name) throws PatientNotFoundException {
 		Patient foundPatient = this.patientRepository.getPatientByName(name);
 		if(foundPatient == null) {
-			throw new PatientNotFoundException("This patient does not exits!");
+			throw new PatientNotFoundException("This patient does not exist!");
 		}
 		return foundPatient;
+	}
+	
+	@Override
+	public Patient addPatient(Patient patient) throws PatientAlreadyExistsException, PatientNotFoundException{
+		Patient newPatient = null;
+		try {
+			Patient patientExists = getPatientById(patient.getId());
+			if(patientExists != null) {
+				throw new PatientAlreadyExistsException("This patient already exists!");
+			}
+		} catch (PatientNotFoundException e) {
+			newPatient =  this.patientRepository.save(patient);
+			e.printStackTrace();
+		}
+		return newPatient;
+	}
+
+	@Override
+	public Patient updatePatient(Patient patient) throws PatientNotFoundException {
+		Optional<Patient> updatedPatient = null;
+		updatedPatient = this.patientRepository.findById(patient.getId());
+		if(!updatedPatient.isPresent()) {
+			throw new PatientNotFoundException("Patient does not exist!");
+		}
+		else {
+			return this.patientRepository.save(patient);
+		}
+		
+	}
+
+	@Override
+	public boolean deletePatient(int id) throws PatientNotFoundException {
+		boolean status = false;
+		Optional<Patient> deletedPatient = null;
+		deletedPatient = this.patientRepository.findById(id);
+		if(!deletedPatient.isPresent()) {
+			throw new PatientNotFoundException("Patient does not exist!");
+		}
+		this.patientRepository.delete(deletedPatient.get());		
+		status = true;
+		
+		return status;
+	}
+
+	@Override
+	public Patient updatePatientDetails(int id, String location, boolean isInsured) throws PatientNotFoundException {
+		Patient updatedPatient = null;
+		Optional<Patient> findPatientById = this.patientRepository.findById(id);
+		if(!findPatientById.isPresent()) {
+			throw new PatientNotFoundException("Patient does not exist!");
+		}
+		else {
+			int rows = this.patientRepository.updatePatientDetails(id, location, isInsured);
+			if(rows > 0) {
+				updatedPatient = this.patientRepository.findById(id).get();
+			}
+		}
+		return updatedPatient;
 	}
 }
