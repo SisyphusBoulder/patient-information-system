@@ -5,7 +5,9 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.modelmapper.ModelMapper;
 
+import com.qa.patientsystem.dto.PatientDto;
 import com.qa.patientsystem.entity.Patient;
 import com.qa.patientsystem.entity.Treatment;
 import com.qa.patientsystem.exception.InvalidLoginDataException;
@@ -22,8 +24,11 @@ public class PatientServiceImplementation implements IPatientService {
 
 	@Autowired
 	TreatmentRepository treatmentRepository;
-	
-	
+
+	@Autowired
+	ModelMapper modelMapper;
+
+
 	@Override
 	public List<Patient> getAllPatients() {
 		return this.patientRepository.findAll();
@@ -77,31 +82,31 @@ public class PatientServiceImplementation implements IPatientService {
 		}
 		return foundPatient;
 	}
-	
-//	@Override
-//	public Patient addPatient(Patient patient) throws PatientAlreadyExistsException, PatientNotFoundException{
-//		Patient newPatient = null;
-//		try {
-//			Patient patientExists = getPatientById(patient.getId());
-//			if(patientExists != null) {
-//				throw new PatientAlreadyExistsException("This patient already exists!");
-//			}
-//		} catch (PatientNotFoundException e) {
-//			newPatient =  this.patientRepository.save(patient);
-//			//e.printStackTrace();
-//		}
-//		return newPatient;
-//	}
-	
+
+	//	@Override
+	//	public Patient addPatient(Patient patient) throws PatientAlreadyExistsException, PatientNotFoundException{
+	//		Patient newPatient = null;
+	//		try {
+	//			Patient patientExists = getPatientById(patient.getId());
+	//			if(patientExists != null) {
+	//				throw new PatientAlreadyExistsException("This patient already exists!");
+	//			}
+	//		} catch (PatientNotFoundException e) {
+	//			newPatient =  this.patientRepository.save(patient);
+	//			//e.printStackTrace();
+	//		}
+	//		return newPatient;
+	//	}
+
 	@Override
 	public Patient addPatient(Patient patient) throws PatientAlreadyExistsException{
 
 		Optional<Patient> optionalPatientFoundByID = this.patientRepository.findById(patient.getId());
-		
+
 		if (optionalPatientFoundByID.isPresent()) {
 			throw new PatientAlreadyExistsException("This patient already exists!");
 		}
-		
+
 		return this.patientRepository.save(patient);
 	}
 
@@ -115,7 +120,7 @@ public class PatientServiceImplementation implements IPatientService {
 		else {
 			return this.patientRepository.save(patient);
 		}
-		
+
 	}
 
 	@Override
@@ -128,25 +133,28 @@ public class PatientServiceImplementation implements IPatientService {
 		}
 		this.patientRepository.delete(deletedPatient.get());		
 		status = true;
-		
+
 		return status;
 	}
-	
+
 	@Override
-	public Patient login(int id, String email, String password) throws PatientNotFoundException, InvalidLoginDataException{
-		Patient selectedPatient = null;
+	public PatientDto login(int id, String email, String password) throws PatientNotFoundException, InvalidLoginDataException{
 		Optional<Patient> findPatientById = this.patientRepository.findById(id);
-		System.out.println(findPatientById);
+		Patient selectedPatient = null;
 		if(!findPatientById.isPresent()) {
 			throw new PatientNotFoundException("Patient does not exist!");
 		}
-		if(!(findPatientById.get().getEmail().equals(email)) || !(findPatientById.get().getPassword().equals(password))) {
-			throw new InvalidLoginDataException("Email or password is incorrect!");
-		}
 		else {
-			selectedPatient = this.patientRepository.findById(id).get();
+			selectedPatient = findPatientById.get();
+
+			if(!(selectedPatient.getEmail().equals(email)) || !(selectedPatient.getPassword().equals(password))) {
+				throw new InvalidLoginDataException("Email or password is incorrect!");
+			}
+			else {
+				System.out.println("login successful");;
+			}
 		}
-		return selectedPatient;
+		return mapToPatientDto(selectedPatient);
 	}
 
 	@Override
@@ -163,5 +171,9 @@ public class PatientServiceImplementation implements IPatientService {
 			}
 		}
 		return updatedPatient;
+	}
+
+	private PatientDto mapToPatientDto(Patient patient) {
+		return this.modelMapper.map(patient, PatientDto.class);
 	}
 }

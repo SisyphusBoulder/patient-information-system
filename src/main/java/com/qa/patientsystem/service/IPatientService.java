@@ -3,6 +3,7 @@ package com.qa.patientsystem.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.qa.patientsystem.dto.PatientDto;
 import com.qa.patientsystem.entity.Patient;
 import com.qa.patientsystem.entity.Treatment;
 import com.qa.patientsystem.exception.InvalidLoginDataException;
@@ -32,5 +33,5 @@ public interface IPatientService {
 
 	boolean deletePatient(int id) throws PatientNotFoundException;
 
-	Patient login(int id, String email, String password) throws PatientNotFoundException, InvalidLoginDataException;
+	PatientDto login(int id, String email, String password) throws PatientNotFoundException, InvalidLoginDataException;
 }

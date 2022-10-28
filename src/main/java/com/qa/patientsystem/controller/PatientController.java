@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.qa.patientsystem.dto.PatientDto;
 import com.qa.patientsystem.entity.Patient;
 import com.qa.patientsystem.entity.Treatment;
+import com.qa.patientsystem.exception.InvalidLoginDataException;
 import com.qa.patientsystem.exception.PatientAlreadyExistsException;
 import com.qa.patientsystem.exception.PatientNotFoundException;
 import com.qa.patientsystem.service.PatientServiceImplementation;
@@ -161,13 +163,15 @@ public class PatientController {
 	}
 	
 	@GetMapping("/patients/login")
-	public ResponseEntity<?> patientLogin(@RequestBody Patient patient) throws PatientNotFoundException{
+	public ResponseEntity<?> patientLogin(@RequestBody Patient patient) throws PatientNotFoundException, InvalidLoginDataException{
 		try {
-			Patient selectedPatient = this.patientService.login(patient.getId(), patient.getEmail(), patient.getPassword());
+			PatientDto selectedPatient = this.patientService.login(patient.getId(), patient.getEmail(), patient.getPassword());
 			responseEntity = new ResponseEntity<>(selectedPatient, HttpStatus.OK);
 		}catch(PatientNotFoundException e) {
 			throw e;
-		}catch (Exception e) {
+		}catch (InvalidLoginDataException e) {
+			throw e;
+		}catch(Exception e){
 			responseEntity = new ResponseEntity<>("Some internal server error occured!", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
