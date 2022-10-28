@@ -40,3 +40,20 @@ Login:
 ```bash
 http://localhost:8080/api/v1/login
 ```
+### Overview
+![Image Not Found](images/Swagger_Overview.png)
+
+### Get All Patients
+![Image Not Found](images/GetAll.png)
+
+### Update Patient
+![Image Not Found](images/UpdatePatient.png)
+
+### Delete Patient
+![Image Not Found](images/DeletePatient.png)
+
+### Sign Up
+![Image Not Found](images/Signup.png)
+
+### Log In
+![Image Not Found](images/Login.png)
