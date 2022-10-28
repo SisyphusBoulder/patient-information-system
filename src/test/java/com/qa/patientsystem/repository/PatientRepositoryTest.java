@@ -53,6 +53,22 @@ public class PatientRepositoryTest {
 	}
 	
 	@Test
+	@DisplayName("get-patients-as-list-test")
+	public void given_GetAllPatients_Should_Return_Patient_List() {
+		
+		
+		patientRepository.save(patient2);
+		patientRepository.save(patient3);
+		patientRepository.save(patient4);
+		patientRepository.save(patient1);
+		
+		List<Patient> patientList = patientRepository.findAll();
+		System.out.println(patientList);
+		assertEquals(4, patientList.size(), "Patient list size should be 4");
+		assertEquals("patient3", patientList.get(1).getName(), "Patient at index 1 should be named patient2");
+	}
+	
+	@Test
 	@DisplayName("save-patient-test")
 	
 	public void given_Patient_To_Save_Should_Return_The_Saved_Patient() {
@@ -61,18 +77,7 @@ public class PatientRepositoryTest {
 		assertEquals("patient1", savedPatient.getName());
 	}
 	
-	@Test
-	@DisplayName("get-patients-as-list-test")
-	public void given_GetAllPatients_Should_Return_Patient_List() {
-		patientRepository.save(patient1);
-		patientRepository.save(patient2);
-		patientRepository.save(patient3);
-		patientRepository.save(patient4);
-		
-		List<Patient> patientList = patientRepository.findAll();
-		assertEquals(4, patientList.size(), "Patient list size should be 4");
-		assertEquals("patient2", patientList.get(1).getName(), "Patient at index 1 should be named patient2");
-	}
+	
 	
 	@Test
 	@DisplayName("get-patient-non-existing-id-test")

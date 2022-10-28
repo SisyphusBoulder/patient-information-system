@@ -25,21 +25,21 @@ public interface PatientRepository extends JpaRepository<Patient, Integer> {
 	@Query("select p from Patient p where p.sex = :sex")
 	List<Patient> findByPatientSex(char sex);
 	
-	@Query("select p from Patient p where p.condition = :condition")
-	List<Patient> findByPatientCondition(String condition);
+	@Query("select p from Patient p where p.illness = :illness")
+	List<Patient> findByPatientillness(String illness);
 	
 	@Query("select p from Patient p where p.location = :location")
 	List<Patient> findByPatientLocation(String location);
 	
 	@Query("select p from Patient p where p.age = :age")
-	List<Patient> findByPatientAge(byte age);
+	List<Patient> findByPatientAge(int age);
 	
-	@Query("select p from Patient p where p.isInsured = :isInsured")
-	List<Patient> findByPatientInsurance(Boolean isInsured);
+	@Query("select p from Patient p where p.insured = :insured")
+	List<Patient> findByPatientInsurance(Boolean insured);
 	
 	@Modifying
-	@Query("update Patient p set p.location = :location, p.isInsured = :isInsured where p.id = :id")
-	int updatePatientDetails(int id, String location, boolean isInsured);
+	@Query("update Patient p set p.location = :location, p.insured = :insured where p.id = :id")
+	int updatePatientDetails(int id, String location, boolean insured);
 
 	Patient findByName(String name);
 	
