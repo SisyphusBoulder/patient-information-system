@@ -10,6 +10,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,6 +21,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import com.qa.patientsystem.exception.PatientAlreadyExistsException;
 import com.qa.patientsystem.exception.PatientNotFoundException;
@@ -27,6 +31,8 @@ import com.qa.patientsystem.entity.Patient;
 import com.qa.patientsystem.repository.PatientRepository;
 
 @ExtendWith(MockitoExtension.class)
+@SpringBootTest
+@AutoConfigureTestDatabase(replace=Replace.NONE)
 public class PatientServiceTest {
 
 	@Mock
@@ -61,21 +67,21 @@ public class PatientServiceTest {
 
 	@Test
 	@DisplayName("save-patient-test")
-	public void given_Patient_To_Save_Should_Return_The_Saved_Patient() throws PatientAlreadyExistsException, PatientNotFoundException {
-		when(patientRepository.getPatientById(any())).thenReturn(patient1);
+	public void given_Patient_To_Save_Should_Return_The_Saved_Patient() throws PatientAlreadyExistsException {
+		when(patientRepository.findById(any())).thenReturn(Optional.empty());
 		when(patientRepository.save(any())).thenReturn(patient1);
 		Patient savedPatient = patientService.addPatient(patient1);
 		System.out.println(savedPatient);
 		assertNotNull(savedPatient);
 		assertEquals(1,savedPatient.getId());
-		verify(patientRepository,times(1)).getPatientById(any());
+		verify(patientRepository,times(1)).findById(any());
 		verify(patientRepository,times(1)).save(any());
 	}
 
 	@Test
 	@DisplayName("save-patient-throws-exception-test")
 	public void given_Existing_Patient_To_Save_Method_Should_Throw_Exception() throws PatientAlreadyExistsException {
-		when(patientRepository.getPatientById(any())).thenReturn(patient1);
+		when(patientRepository.findById(any())).thenReturn(Optional.of(patient1));
 
 		//patientService.addPatient(patient1);
 		assertThrows(PatientAlreadyExistsException.class,()-> patientService.addPatient(patient1));

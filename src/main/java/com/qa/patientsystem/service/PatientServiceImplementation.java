@@ -78,19 +78,31 @@ public class PatientServiceImplementation implements IPatientService {
 		return foundPatient;
 	}
 	
+//	@Override
+//	public Patient addPatient(Patient patient) throws PatientAlreadyExistsException, PatientNotFoundException{
+//		Patient newPatient = null;
+//		try {
+//			Patient patientExists = getPatientById(patient.getId());
+//			if(patientExists != null) {
+//				throw new PatientAlreadyExistsException("This patient already exists!");
+//			}
+//		} catch (PatientNotFoundException e) {
+//			newPatient =  this.patientRepository.save(patient);
+//			//e.printStackTrace();
+//		}
+//		return newPatient;
+//	}
+	
 	@Override
-	public Patient addPatient(Patient patient) throws PatientAlreadyExistsException, PatientNotFoundException{
-		Patient newPatient = null;
-		try {
-			Patient patientExists = getPatientById(patient.getId());
-			if(patientExists != null) {
-				throw new PatientAlreadyExistsException("This patient already exists!");
-			}
-		} catch (PatientNotFoundException e) {
-			newPatient =  this.patientRepository.save(patient);
-			e.printStackTrace();
+	public Patient addPatient(Patient patient) throws PatientAlreadyExistsException{
+
+		Optional<Patient> optionalPatientFoundByID = this.patientRepository.findById(patient.getId());
+		
+		if (optionalPatientFoundByID.isPresent()) {
+			throw new PatientAlreadyExistsException("This patient already exists!");
 		}
-		return newPatient;
+		
+		return this.patientRepository.save(patient);
 	}
 
 	@Override
