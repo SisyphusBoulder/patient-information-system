@@ -46,18 +46,18 @@ public class PatientServiceImplementation implements IPatientService {
 	}
 
 	@Override
-	public List<Patient> findByPatientCondition(String condition) {
-		return this.patientRepository.findByPatientCondition(condition);
+	public List<Patient> findByPatientillness(String illness) {
+		return this.patientRepository.findByPatientillness(illness);
 	}
 
 	@Override
-	public List<Patient> findByPatientAge(byte age) {
+	public List<Patient> findByPatientAge(int age) {
 		return this.patientRepository.findByPatientAge(age);
 	}
 
 	@Override
-	public List<Patient> findByPatientInsurance(boolean isInsured) {
-		return this.patientRepository.findByPatientInsurance(isInsured);
+	public List<Patient> findByPatientInsurance(boolean insured) {
+		return this.patientRepository.findByPatientInsurance(insured);
 	}
 
 	@Override
@@ -100,6 +100,8 @@ public class PatientServiceImplementation implements IPatientService {
 
 	@Override
 	public Patient addPatient(Patient patient) throws PatientAlreadyExistsException{
+		
+		System.out.println(patient);
 
 		Optional<Patient> optionalPatientFoundByID = this.patientRepository.findById(patient.getId());
 
@@ -158,14 +160,14 @@ public class PatientServiceImplementation implements IPatientService {
 	}
 
 	@Override
-	public Patient updatePatientDetails(int id, String location, boolean isInsured) throws PatientNotFoundException {
+	public Patient updatePatientDetails(int id, String location, boolean insured) throws PatientNotFoundException {
 		Patient updatedPatient = null;
 		Optional<Patient> findPatientById = this.patientRepository.findById(id);
 		if(!findPatientById.isPresent()) {
 			throw new PatientNotFoundException("Patient does not exist!");
 		}
 		else {
-			int rows = this.patientRepository.updatePatientDetails(id, location, isInsured);
+			int rows = this.patientRepository.updatePatientDetails(id, location, insured);
 			if(rows > 0) {
 				updatedPatient = this.patientRepository.findById(id).get();
 			}

@@ -70,10 +70,10 @@ public class PatientController {
 		return responseEntity;
 	}
 	
-	@GetMapping("/patients/condition/{condition}")
-	public ResponseEntity<?> findByPatientCondition(@Valid @PathVariable("condition") String condition){
+	@GetMapping("/patients/illness/{illness}")
+	public ResponseEntity<?> findByPatientillness(@Valid @PathVariable("illness") String illness){
 		try {
-			List<Patient> patientList = this.patientService.findByPatientCondition(condition);
+			List<Patient> patientList = this.patientService.findByPatientillness(illness);
 			responseEntity = new ResponseEntity<>(patientList, HttpStatus.OK);
 		} catch (Exception e) {
 			responseEntity = new ResponseEntity<>("Some internal server error occured!", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -83,7 +83,7 @@ public class PatientController {
 	}
 	
 	@GetMapping("/patients/age/{age}")
-	public ResponseEntity<?> findByPatientLocation(@Valid @PathVariable("age") byte age){
+	public ResponseEntity<?> findByPatientLocation(@Valid @PathVariable("age") int age){
 		try {
 			List<Patient> patientList = this.patientService.findByPatientAge(age);
 			responseEntity = new ResponseEntity<>(patientList, HttpStatus.OK);
@@ -95,9 +95,9 @@ public class PatientController {
 	}
 	
 	@GetMapping("/patients/insurance/{isInsured}")
-	public ResponseEntity<?> findByPatientInsurance(@Valid @PathVariable("isInsured") boolean isInsured){
+	public ResponseEntity<?> findByPatientInsurance(@Valid @PathVariable("isInsured") boolean insured){
 		try {
-			List<Patient> patientList = this.patientService.findByPatientInsurance(isInsured);
+			List<Patient> patientList = this.patientService.findByPatientInsurance(insured);
 			responseEntity = new ResponseEntity<>(patientList, HttpStatus.OK);
 		} catch (Exception e) {
 			responseEntity = new ResponseEntity<>("Some internal server error occured!", HttpStatus.INTERNAL_SERVER_ERROR);

@@ -19,7 +19,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import net.bytebuddy.dynamic.loading.ClassReloadingStrategy.Strategy;
 
 @Data
 @NoArgsConstructor
@@ -45,33 +44,35 @@ public class Patient {
 	@Min(0)
 	@Max(105)
 	@Column(name = "age")
-	private byte age;
+	private int age;
 	
 	//@NotBlank
 	//@Pattern(regexp = "[FM]", message = "sex must be assigned as either F or M!")
+	@Column(name = "sex")
 	private char sex;
 	
-	@NotBlank
+	@NotNull
 	@Email(message = "Email must follow regular format!")
+	@Column(name = "email")
 	private String email;
 	
-	@NotBlank
+	@NotNull
 	@Size(min=2, max=30, message = "location must be between 2 and 30 characters!")
 	@Pattern(regexp = "^[A-Za-z0-9 ]*", message = "invalid name, must only contain alphabet characters!")
 	@Column(name = "location")
 	private String location;
 	
-	@NotBlank
-	@Column(name = "condition")
-	private String condition;
+	@NotNull
+	@Column(name = "illness")
+	private String illness;
 	
 	@NotNull
-	@Column(name = "is_insured")
-	private boolean isInsured;
+	@Column(name = "insured")
+	private boolean insured;
 	
 	@NotNull
 	@Size(min=5, max=20, message = "Password must be between 5 and 20 characters!")
-	@Column(name = "password")
+	@Column(name = "pass")
 	private String password;
 	
 	/*@NotNull

@@ -144,11 +144,11 @@ public class PatientControllerTest {
 	}
 
 	@Test
-	@DisplayName("get-patients-by-condition-test")
-	public void given_conditionPassedToFindByPatientCondtion_ShouldReturnList() throws Exception{
+	@DisplayName("get-patients-by-illness-test")
+	public void given_illnessPassedToFindByPatientCondtion_ShouldReturnList() throws Exception{
 		List<Patient> modPatientList = Arrays.asList(patient2); 
-		when(patientService.findByPatientCondition("Influenza")).thenReturn(modPatientList);
-		mockMvc.perform(get("/api/v1/patients/condition/Influenza")
+		when(patientService.findByPatientillness("Influenza")).thenReturn(modPatientList);
+		mockMvc.perform(get("/api/v1/patients/illness/Influenza")
 				.accept(MediaType.APPLICATION_JSON))
 		.andDo(MockMvcResultHandlers.print())
 		.andExpect(status().isOk())
