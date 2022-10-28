@@ -5,6 +5,7 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -36,7 +37,10 @@ public interface PatientRepository extends JpaRepository<Patient, Integer> {
 	@Query("select p from Patient p where p.isInsured = :isInsured")
 	List<Patient> findByPatientInsurance(Boolean isInsured);
 	
+	@Modifying
 	@Query("update Patient p set p.location = :location, p.isInsured = :isInsured where p.id = :id")
 	int updatePatientDetails(int id, String location, boolean isInsured);
+
+	Patient findByName(String name);
 	
 }

@@ -70,6 +70,7 @@
 	</dependencies>
 
 	<build>
+	<finalName>patient-information-system</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
