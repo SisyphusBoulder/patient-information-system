@@ -56,4 +56,4 @@ http://localhost:8080/api/v1/login
 ![Image Not Found](images/Signup.png)
 
 ### Log In
-![Image Not Found](images/Login.png)
+![Image Not Found](images/login.png)
